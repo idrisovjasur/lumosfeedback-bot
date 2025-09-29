@@ -4,7 +4,7 @@ from aiogram.types import Message, Update
 from typing import Callable, Dict, Any
 
 class ManualThrottlingMiddleware(BaseMiddleware):
-    def __init__(self, delay_seconds: float = 2.0):
+    def __init__(self, delay_seconds: float = 1.0):
         self.delay = delay_seconds
         self.user_last_time: Dict[int, float] = {}
 

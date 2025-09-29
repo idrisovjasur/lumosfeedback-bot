@@ -13,10 +13,10 @@ from handlers.users.start import start_router
 async def main() -> None:
     dp.include_router(start_router)
     await db.create()
-    try:
-        await db.create_table_users()
-    except asyncpg.exceptions.UniqueViolationError:
-        print('already exists database')
+    # try:
+    #     await db.create_table_users()
+    # except asyncpg.exceptions.UniqueViolationError:
+    #     print('already exists database')
     await set_default_commands()
     await on_startup_notify()
     await dp.start_polling(bot)

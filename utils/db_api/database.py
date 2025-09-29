@@ -58,8 +58,16 @@ class Database:
         return sql, tuple(parameters.values())
 
     async def add_user(self, full_name, username, telegram_id):
-        sql = "INSERT INTO users (full_name, username, telegram_id) VALUES($1, $2, $3) returning *"
+        sql = "INSERT INTO app_telegramusers (full_name, username, telegram_id) VALUES($1, $2, $3) returning *"
         return await self.execute(sql, full_name, username, telegram_id, fetchrow=True)
+
+    async def add_anonymous_feedback(self, feedback, username, telegram_id, status):
+        sql = "INSERT INTO app_anonymfeedbackmodel (feedback, username, telegram_id, status) VALUES($1, $2, $3, $4) returning *"
+        return await self.execute(sql, feedback, username, telegram_id, status, fetchrow=True)
+
+    async def add_identified_feedback(self, feedback, username, telegram_id, status, full_name):
+        sql = "INSERT INTO app_identifiedfeedbackmodel (feedback, username, telegram_id, status, full_name) VALUES($1, $2, $3, $4, $5) returning *"
+        return await self.execute(sql, feedback, username, telegram_id, status, full_name, fetchrow=True)
 
     async def select_all_users(self):
         sql = "SELECT * FROM Users"

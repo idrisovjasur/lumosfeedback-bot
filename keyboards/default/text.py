@@ -1,4 +1,4 @@
-anonymous_keyboard_text = "🕵️ Send Anonymous Feedback"
-identified_keyboard_text = "🙋 Send Identified Feedback"
+anonymous_keyboard_text = "🕵️ Anonymous Feedback"
+identified_keyboard_text = "🙋 Identified Feedback"
 yes = "✔️ Submit"
 no = "❌ Cancel"

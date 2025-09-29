@@ -1,3 +1,5 @@
+from logging import exception
+
 import asyncpg
 from aiogram import F, Router
 from aiogram.filters import CommandStart
@@ -48,14 +50,27 @@ async def identified_feedback_text(message: Message, state: FSMContext):
     await message.answer(text.user_name(message.from_user.full_name), reply_markup=submission_keyboard)
     await state.set_state(FeedBackStates.submitted_identified)
 
+
 @start_router.message(FeedBackStates.submitted_anonymous, F.text)
 async def submission_feedback_function(message: Message, state: FSMContext):
     if message.text == yes:
         data = await state.get_data()
         feedback_text = data.get("feedback_text")
-        await message.answer(text.text_3)
+        try:
+            await db.add_anonymous_feedback(
+                telegram_id=message.from_user.id,
+                feedback=feedback_text,
+                username=message.from_user.username,
+                status=False
+            )
+            await state.clear()
+        except exception as e:
+            print(e)
+        await message.answer(text.text_3, reply_markup=feedback_keyboard)
     elif message.text == no:
-        pass
+        await message.answer(text = no, reply_markup=feedback_keyboard)
+        await state.clear()
+
 
 
 @start_router.message(FeedBackStates.submitted_identified, F.text)
@@ -63,9 +78,21 @@ async def identified_feedback_function(message: Message, state: FSMContext):
     if message.text == yes:
         data = await state.get_data()
         feedback_text = data.get("feedback_text")
-        await message.answer(text.text_4)
+        try:
+            await db.add_identified_feedback(
+                telegram_id=message.from_user.id,
+                feedback=feedback_text,
+                username=message.from_user.username,
+                full_name=message.from_user.full_name,
+                status=False
+            )
+            await state.clear()
+        except asyncpg.exceptions.UniqueViolationError:
+            print('error')
+        await message.answer(text.text_4, reply_markup=feedback_keyboard)
     elif message.text == no:
-        pass
+        await message.answer(no, reply_markup=feedback_keyboard)
+        await state.clear()
 
 
 
