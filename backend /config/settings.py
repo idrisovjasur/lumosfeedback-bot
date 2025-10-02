@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -84,9 +85,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'feedback',       # <-- PostgreSQL bazangiz nomi
+        'NAME': 'lumosfeedback',       # <-- PostgreSQL bazangiz nomi
         'USER': 'postgres',       # <-- PostgreSQL foydalanuvchi nomi
-        'PASSWORD': 'linux', # <-- foydalanuvchi paroli
+        'PASSWORD': 'linuxda121212', # <-- foydalanuvchi paroli
         'HOST': 'localhost',    # <-- agar server lokal bo‘lsa
         'PORT': '5432',         # <-- default port
     }
@@ -124,12 +125,16 @@ USE_I18N = True
 
 USE_TZ = True
 
+import os
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
