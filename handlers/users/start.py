@@ -8,21 +8,40 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from handlers.users import text
 from loader import db
 from states.feedback import FeedBackStates
-from keyboards.default.feedback import feedback_keyboard, submission_keyboard
-from keyboards.default.text import anonymous_keyboard_text,identified_keyboard_text, yes, no
+from keyboards.default.feedback import feedback_keyboard, submission_keyboard, school_type_keyboard, people_type_keyboard, pupil_type_keyboard
+from keyboards.default.text import anonymous_keyboard_text,identified_keyboard_text, yes, no, school_type, people_type, pupil_type
 start_router = Router()
 
 @start_router.message(CommandStart())
-async def start(message: Message):
-    try:
-        await db.add_user(
-            telegram_id=message.from_user.id,
-            full_name=message.from_user.full_name,
-            username=message.from_user.username,
-        )
-    except asyncpg.exceptions.UniqueViolationError:
+async def start(message: Message, state: FSMContext):
+    await state.set_state(FeedBackStates.school_type)
+    await message.answer(text.school_type_text,reply_markup=school_type_keyboard)
+
+@start_router.message(FeedBackStates.school_type, F.text.in_([school_type.get('2'),school_type.get('1')]))
+async def school_type_function(message: Message, state: FSMContext):
+    school = message.text
+    await state.update_data(school=school)
+    await message.answer(text=text.people_type_text,reply_markup=people_type_keyboard)
+    await state.set_state(FeedBackStates.people_type)
+
+@start_router.message(FeedBackStates.people_type, F.text.in_([people_type.get('1'),people_type.get('2'), people_type.get('3')]))
+async def people_type_function(message: Message, state: FSMContext):
+    people = message.text
+    await state.update_data(people=people)
+    if people == people_type.get('1'):
+        await message.answer(text=text.pupil_type_text, reply_markup=pupil_type_keyboard)
+        await state.set_state(FeedBackStates.pupil_type)
+    else:
         pass
-    await message.answer(text.start_text,reply_markup=feedback_keyboard)
+
+@start_router.message(FeedBackStates.pupil_type, F.text.in_([pupil_type.get('1'),pupil_type.get('2')]))
+async def pupil_type_function(message: Message, state: FSMContext):
+    pupil = message.text
+    await state.update_data(pupil=pupil)
+    await message.answer(pupil)
+
+
+
 
 @start_router.message(F.text==anonymous_keyboard_text)
 async def anonymous_feedback(message: Message, state: FSMContext):

@@ -16,3 +16,22 @@ submission_keyboard = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True,
 )
+
+school_type_keyboard = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text=text.school_type.get('1')), KeyboardButton(text=text.school_type.get('2'))],
+    ],
+    resize_keyboard=True
+)
+
+people_type_keyboard = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text=text.people_type.get('1')), KeyboardButton(text=text.people_type.get('2'))],
+        [KeyboardButton(text=text.people_type.get('3'))],
+    ], resize_keyboard=True
+)
+pupil_type_keyboard = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text=text.pupil_type.get('1')), KeyboardButton(text=text.pupil_type.get('2'))],
+    ], resize_keyboard=True
+)
