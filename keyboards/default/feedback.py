@@ -5,7 +5,7 @@ feedback_keyboard = ReplyKeyboardMarkup(
         [KeyboardButton(text=text.anonymous_keyboard_text),
          KeyboardButton(text=text.identified_keyboard_text)
          ],
-
+        [KeyboardButton(text = text.about)]
     ],
     resize_keyboard=True,
 )

@@ -9,3 +9,6 @@ class FeedBackStates(StatesGroup):
     school_type = State()
     people_type = State()
     pupil_type = State()
+    pupil_name = State()
+    pupil_phone = State()
+    pupil_class = State()
